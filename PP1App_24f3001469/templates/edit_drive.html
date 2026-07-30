@@ -1,0 +1,24 @@
+<!-- templates/edit_drive.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Placement Drive</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label for="title" class="form-label">Job Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ drive.title }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description">{{ drive.description }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label for="eligibility" class="form-label">Eligibility</label>
+        <textarea class="form-control" id="eligibility" name="eligibility">{{ drive.eligibility }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label for="deadline" class="form-label">Deadline</label>
+        <input type="date" class="form-control" id="deadline" name="deadline" value="{{ drive.deadline.strftime('%Y-%m-%d') }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+{% endblock %}

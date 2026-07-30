@@ -1,0 +1,42 @@
+/* style.css
+   A few small extra styles on top of Bootstrap to make the app feel nicer.
+   We are NOT using any JavaScript, just plain CSS. */
+
+body {
+    background-color: #f4f7f6;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card {
+    text-align: center;
+    padding: 20px;
+}
+
+.stat-card h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.footer {
+    text-align: center;
+    padding: 15px;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.badge-status {
+    font-size: 0.85rem;
+}
+
+table.table {
+    background-color: white;
+}

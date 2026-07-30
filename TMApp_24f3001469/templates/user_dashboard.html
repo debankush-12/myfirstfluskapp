@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trekker Panel</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            margin: 20px; 
+            background: #fafafa; 
+        }
+        .header { 
+            display: flex; 
+            justify-content: 
+            space-between; 
+            align-items: center; 
+            border-bottom: 2px solid #ddd; 
+            padding-bottom: 10px; 
+        }
+        .btn-red { 
+            background: #dc3545; 
+            color: white; 
+            padding: 6px 12px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-size: 14px; 
+        }
+        .form-inline { 
+            display: flex; 
+            gap: 8px; 
+            margin: 20px 0; 
+        }
+        .form-inline input, .form-inline select { 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+        }
+        .form-inline button { 
+            padding: 8px 16px; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+        }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px; 
+            margin-bottom: 30px; 
+        }
+        .trek-card { 
+            background: white; 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            border-radius: 6px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+        }
+        .btn-green { 
+            display: block; 
+            text-align: center; 
+            background: #28a745; 
+            color: white; 
+            padding: 8px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            margin-top: 10px; 
+            font-weight: bold; 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background: white; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            text-align: left; 
+        }
+        th { 
+            background: #f2f2f2; 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Trekker Dashboard: {{session.username}}</h2>
+        <a href="/logout" class="btn-red">Logout</a>
+    </div>
+
+
+    <h3>Available Treks</h3>
+    <div class="grid">
+        {% for t in treks %}
+        <div class="trek-card">
+            <div>
+                <h4 style="margin: 0 0 8px 0;">{{t.name}}</h4>
+                <p style="margin: 4px 0;">📍 Location: {{t.location}} ({{t.difficulty}})</p>
+                <p style="margin: 4px 0;">Duration: {{t.duration}} Days</p>
+                <p style="margin: 4px 0; color: #dc3545;">Remaining Slots: <strong>{{t.available_slots}}</strong></p>
+            </div>
+            <a href="/user/book/{{t.id}}" class="btn-green">Book Spot</a>
+        </div>
+        {% else %}
+        <p style="color: #777;">No open trekking routes found.</p>
+        {% endfor %}
+    </div>
+
+    <h3>My Bookings & Timeline</h3>
+    <table>
+        <thead>
+            <tr><th>Trek Route</th><th>Status Log</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            {% for b in bookings %}
+            <tr>
+                <td><strong>{{b.trek.name}}</strong></td>
+                <td><span style="color: #e67e22; font-weight: bold;">{{b.status}}</span></td>
+                <td>
+                    {% if b.status == 'Booked' %}
+                    <a href="/user/cancel/{{b.id}}" class="btn-red" style="padding: 4px 8px; font-size: 12px; text-decoration: none;">Cancel</a>
+                    {% else %}
+                    <span style="color:#aaa;">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

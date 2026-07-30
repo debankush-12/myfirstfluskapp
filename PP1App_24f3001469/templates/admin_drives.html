@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manage Placement Drives</h2>
+    <span class="badge bg-secondary">{{ drives|length }} Drives Total</span>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Job Title</th>
+                <th>Company</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for drive in drives %}
+            <tr>
+                <td>{{ drive.id }}</td>
+                <td>
+                    <strong>{{ drive.title }}</strong>
+                </td>
+                <td>
+                    {% if drive.creator and drive.creator.company_profile %}
+                        {{ drive.creator.company_profile.name }}
+                    {% else %}
+                        <span class="text-muted">Unknown Company</span>
+                    {% endif %}
+                </td>
+                <td>{{ drive.deadline.strftime('%d-%m-%Y') }}</td>
+                <td>
+                    <span class="badge {% if drive.status == 'approved' %}bg-success{% elif drive.status == 'rejected' %}bg-danger{% elif drive.status == 'closed' %}bg-dark{% else %}bg-warning text-dark{% endif %}">
+                        {{ drive.status|capitalize }}
+                    </span>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        {% if drive.status == 'pending' %}
+                            <a href="{{ url_for('approve_drive', drive_id=drive.id) }}" class="btn btn-success btn-sm">Approve</a>
+                            <a href="{{ url_for('reject_drive', drive_id=drive.id) }}" class="btn btn-danger btn-sm">Reject</a>
+                        {% endif %}
+                        
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#driveModal{{ drive.id }}">Details</button>
+                    </div>
+
+                    <div class="modal fade" id="driveModal{{ drive.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{ drive.title }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6>Description:</h6>
+                                    <p>{{ drive.description }}</p>
+                                    <hr>
+                                    <h6>Eligibility:</h6>
+                                    <p>{{ drive.eligibility }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">No placement drives found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

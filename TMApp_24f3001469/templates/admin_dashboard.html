@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            margin: 20px; 
+            background: #fafafa; 
+            color: #000000; 
+        }
+        .header { 
+            display: flex; 
+            
+            align-items: center; 
+            justify-content: space-between;
+            padding-bottom: 10px; 
+        }
+        .btn-red { 
+            background: #ff0019; 
+            color: white; 
+            padding: 6px 12px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-size: 14px; 
+            margin-left: 10px;
+        }
+
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px; 
+            margin: 20px 0; 
+        }
+        .stat-box { 
+            background: #e9ecef; 
+            padding: 15px; 
+            border-radius: 4px; 
+            text-align: center; 
+            font-weight: bold; 
+        }
+        
+        .form-inline { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 20px; 
+        }
+        .form-inline input { 
+            flex: 1; 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+        }
+        
+        .panel-box { 
+            background: white; 
+            padding: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px;
+            margin-bottom: 20px; 
+        }
+        table { 
+            width: 100%; 
+            
+            margin-top: 10px; 
+            background: white; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            text-align: left; 
+        }
+        th { 
+            background: #f2f2f2; 
+        }
+        .row-item { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 8px 0; 
+            border-bottom: 1px solid #eee; 
+        }
+        .btn-green { 
+            background: #28a745;  
+            color: white; 
+            padding: 6px 12px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-size: 14px; 
+            margin-left: 10px;
+            border: none;
+        }
+        .btn-blue { 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Admin Panel</h2>
+        <a href="/logout" class="btn-red">Logout</a>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-box">Treks: {{total_treks}}</div>
+        <div class="stat-box">Trekkers: {{total_users}}</div>
+        <div class="stat-box">Staff: {{total_staff}}</div>
+        <div class="stat-box">Bookings: {{total_bookings}}</div>
+    </div>
+    
+    <div class="panel-box">
+        <h4 style="margin: 0 0 10px 0;">Create a New Trek Route</h4>
+        <form method="POST" action="/admin/add_trek" class="form-inline">
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="text" name="location" placeholder="Location" required>
+            <select name="difficulty"><option>Easy</option><option>Moderate</option><option>Hard</option></select>
+            <input type="number" name="duration" placeholder="Days" required style="max-width: 90px;">
+            <input type="number" name="slots" placeholder="Slots" required style="max-width: 90px;">
+            <button type="submit" class="btn-green">Save</button>
+        </form>
+    </div>
+
+    <h3>Manage Treks & Staff Assignments</h3>
+    <table>
+        <thead>
+            <tr><th>Trek</th><th>Location</th><th>Slots</th><th>Status</th><th>Guide</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            {% for t in treks %}
+            <tr>
+                <td><strong>{{t.name}}</strong></td>
+                <td>{{t.location}} ({{t.difficulty}})</td>
+                <td>{{t.available_slots}}</td>
+                <td><span style="color: #007bff; font-weight: bold;">{{t.status}}</span></td>
+                <td>{{t.staff.username if t.staff else 'None Assigned'}}</td>
+                <td>
+                    <form method="POST" action="/admin/assign_staff/{{t.id}}" style="display: inline-flex; gap: 5px; margin: 0;">
+                        <select name="staff_id" style="padding: 4px; border-radius: 4px;">
+                            {% for s in available_staff %}
+                            <option value="{{s.id}}">{{s.username}}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn-blue">Assign</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 style="margin-top: 30px;">Staff Approval Requests</h3>
+    <div class="panel-box">
+        {% for s in staff_members %}
+        <div class="row-item">
+            <span><strong>{{s.username}}</strong> (Status: {{s.status}})</span>
+            <div>
+                <a href="/admin/user_status/{{s.id}}/Approved" class="btn-green" style="text-decoration: none;">Approve</a>
+                <a href="/admin/user_status/{{s.id}}/Blacklisted" class="btn-red" style="text-decoration: none;">Blacklist</a>
+            </div>
+        </div>
+        {% else %}
+        <p style="color: #777; margin: 0;">No staff accounts registered.</p>
+        {% endfor %}
+    </div>
+
+    <h3>Registered Trekkers (Users)</h3>
+    <div class="panel-box">
+        {% for u in users %}
+        <div class="row-item">
+            <span><strong>{{u.username}}</strong> (Status: {{u.status}})</span>
+            <a href="/admin/user_status/{{u.id}}/Blacklisted" class="btn-red" style="text-decoration: none;">Blacklist</a>
+        </div>
+        {% else %}
+        <p style="color: #777; margin: 0;">No user accounts found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

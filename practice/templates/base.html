@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Simple HTML Webpage</title>
+</head>
+<body>
+
+    <header>
+        <h1>Welcome to My Webpage</h1>
+        <p>A simple website built entirely with pure HTML.</p>
+    </header>
+
+    <hr>
+
+    <nav>
+        <a href="#about">About Me</a> | 
+        <a href="#projects">My Projects</a> | 
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <hr>
+
+    <main>
+        
+        <section id="about">
+            <h2>About This Page</h2>
+            <p>This page is created using basic HTML tags without any external CSS styling or JavaScript. It shows the raw, foundational structure of a web page.</p>
+            <p>HTML stands for <strong>HyperText Markup Language</strong>. It uses tags to organize content like headings, paragraphs, lists, and images.</p>
+        </section>
+
+        <section id="projects">
+            <h2>Things I am Working On</h2>
+            <ul>
+                <li>Learning the basics of web structure.</li>
+                <li>Building simple layouts.</li>
+                <li>Understanding how links and tables work.</li>
+            </ul>
+        </section>
+
+        <section id="contact">
+            <h2>Get in Touch</h2>
+            <p>If you'd like to connect, you can reach out via email or check out my professional profiles.</p>
+        </section>
+
+        <section>
+            {% for i in range(5) %}
+                <p>thank you</p>
+            {% endfor %}
+        </section>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>&copy; 2026 My Basic HTML Website. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

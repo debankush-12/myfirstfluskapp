@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Manage Staff{% endblock %}
+
+{% block content %}
+<h3 class="mb-4">Manage Trek Staff</h3>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in staff %}
+            <tr>
+                <td>{{ member.id }}</td>
+                <td>{{ member.name }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.contact }}</td>
+                <td>
+                    {% if member.status == 'pending' %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    {% elif member.status == 'approved' %}
+                        <span class="badge bg-success">Approved</span>
+                    {% else %}
+                        <span class="badge bg-danger">Blacklisted</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if member.status == 'pending' %}
+                        <form method="POST" action="{{ url_for('admin_approve_staff', staff_id=member.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                        </form>
+                        <form method="POST" action="{{ url_for('admin_blacklist_staff', staff_id=member.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Reject / Blacklist</button>
+                        </form>
+                    {% elif member.status == 'approved' %}
+                        <form method="POST" action="{{ url_for('admin_blacklist_staff', staff_id=member.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Blacklist</button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('admin_reactivate_staff', staff_id=member.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Reactivate</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" class="text-center">No staff registrations yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

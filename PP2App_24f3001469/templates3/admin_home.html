@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Placement Portal</title>
+    <style>
+        :root { 
+            --primary: #2e2eca; 
+            --bg: #eff6fe; 
+            --text: #1e293b; 
+            --white: #ffffff; 
+        }
+        body { 
+            font-family: sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+        }
+        nav { 
+            background: var(--white); 
+            padding: 20px; 
+            border-bottom: 1px solid #e2e8f0; 
+            display: flex; 
+            justify-content: space-between; align-items: center; 
+        }
+        .container { 
+            max-width: 1000px; 
+            margin: 2px auto; 
+            padding: 30px 10px; 
+            text-align: center;
+        }
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: 
+            repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 1.5rem; 
+            margin-top: 2rem; 
+        }
+        .stat-card { 
+            background: var(--white); 
+            padding: 1.5rem; 
+            border-radius: 1rem; 
+            border: 1px solid #e2e8f0;
+            text-align: center; 
+        }
+        
+        .stat-card p { 
+            font-size: 2.5rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            margin: 0.5rem 0; 
+        }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text); 
+            margin-left: 1.5rem; 
+            font-weight: 500; 
+            font-size: 0.9rem; 
+        }
+        .logout { 
+            color: #ef4444 !important ; 
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="font-weight: 800; font-size: 1.25rem;">Admin<span>Panel</span></div>
+        <div class="nav-links">
+            <a href="{{ url_for('admin_companies') }}">Companies</a>
+            <a href="{{ url_for('admin_drives') }}">Drives</a>
+            <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Welcome, Admin</h1>
+        <div class="stats-grid">
+            <div class="stat-card"><h3>Students</h3><p>{{ stats.students }}</p></div>
+            <div class="stat-card"><h3>Approved Companies</h3><p>{{ stats.companies }}</p></div>
+            <div class="stat-card"><h3>Total Drives</h3><p>{{ stats.drives }}</p></div>
+        </div>
+    </div>
+    <h2 style="margin-top: 3rem; margin-bottom: 1.5rem; text-align: center;">Registered Students</h2>
+<div class="container">
+    
+    <table style="background: var(--white); 
+            padding: 10px ;
+            border-radius: 10px ;
+            border: 1px solid #e2e8f0;
+            text-align: center; margin: auto;">
+        <thead>
+            <tr style="background: #f1f5f9;"  >
+                <th style="padding: 1rem; font-size: 0.875rem; color: #64748b; font-weight: 600;">Name</th>
+                <th style="padding: 1rem; font-size: 0.875rem; color: #64748b; font-weight: 600;">Email</th>
+                <th style="padding: 1rem; font-size: 0.875rem; color: #64748b; font-weight: 600;">Joined Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td style="padding: 1rem; border-top: 1px solid #e2e8f0; font-weight: 500;">{{ student.name }}</td>
+                <td style="padding: 1rem; border-top: 1px solid #e2e8f0; color: #64748b;">{{ student.email }}</td>
+                <td style="padding: 1rem; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 0.875rem;">{{ student.created_at }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" style="padding: 2rem; text-align: center; color: #94a3b8;">No students registered yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

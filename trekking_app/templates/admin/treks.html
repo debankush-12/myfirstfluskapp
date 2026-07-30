@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Manage Treks{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Manage Treks</h3>
+    <a href="{{ url_for('admin_add_trek') }}" class="btn btn-primary">+ Add New Trek</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Difficulty</th>
+                <th>Duration</th>
+                <th>Slots (Available/Total)</th>
+                <th>Assigned Staff</th>
+                <th>Status</th>
+                <th>Dates</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trek in treks %}
+            <tr>
+                <td>{{ trek.id }}</td>
+                <td>{{ trek.name }}</td>
+                <td>{{ trek.location }}</td>
+                <td>{{ trek.difficulty }}</td>
+                <td>{{ trek.duration }} day(s)</td>
+                <td>{{ trek.available_slots }} / {{ trek.total_slots }}</td>
+                <td>{{ trek.staff_name or "Not Assigned" }}</td>
+                <td><span class="badge bg-info text-dark badge-status">{{ trek.status }}</span></td>
+                <td>{{ trek.start_date }} to {{ trek.end_date }}</td>
+                <td>
+                    <a href="{{ url_for('admin_edit_trek', trek_id=trek.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <form method="POST" action="{{ url_for('admin_delete_trek', trek_id=trek.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="10" class="text-center">No treks created yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

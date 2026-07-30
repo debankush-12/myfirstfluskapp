@@ -1,0 +1,20 @@
+<!-- templates/company_profile.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Profile</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ company.name }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="hr_contact" class="form-label">HR Contact</label>
+        <input type="text" class="form-control" id="hr_contact" name="hr_contact" value="{{ company.hr_contact }}">
+    </div>
+    <div class="mb-3">
+        <label for="website" class="form-label">Website</label>
+        <input type="url" class="form-control" id="website" name="website" value="{{ company.website }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+{% endblock %}

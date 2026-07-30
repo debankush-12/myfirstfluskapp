@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+<h3 class="mb-4">Welcome, {{ session.get('name') }}!</h3>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <h2>{{ open_trek_count }}</h2>
+            <p class="mb-0">Treks Open for Booking</p>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex gap-2 mb-4">
+    <a href="{{ url_for('user_treks') }}" class="btn btn-primary">Browse Treks</a>
+    <a href="{{ url_for('user_bookings') }}" class="btn btn-outline-secondary">View All My Bookings</a>
+</div>
+
+<h5>Recent Bookings</h5>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr><th>Trek</th><th>Booking Date</th><th>Trek Status</th><th>Booking Status</th></tr>
+        </thead>
+        <tbody>
+            {% for b in my_bookings %}
+            <tr>
+                <td>{{ b.trek_name }}</td>
+                <td>{{ b.booking_date }}</td>
+                <td>{{ b.trek_status }}</td>
+                <td>{{ b.status }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="text-center">You haven't booked any treks yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

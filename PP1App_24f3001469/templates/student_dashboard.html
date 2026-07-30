@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Student Dashboard</h2>
+
+<h4>Approved Placement Drives</h4>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>Deadline</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for drive in drives %}
+        <tr>
+            <td>{{ drive.title }}</td>
+            <td>{{ drive.creator.company_profile.name if drive.creator else "N/A" }}</td>
+            <td>{{ drive.deadline.strftime('%d-%m-%Y') }}</td>
+            <td>
+                {% if drive.id in applied_ids %}
+                    <span class="badge bg-secondary">Applied</span>
+                {% else %}
+                    <a href="{{ url_for('apply_drive', drive_id=drive.id) }}" class="btn btn-primary btn-sm">Apply</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h4>My Application History</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Drive</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.drive.title }}</td>
+            <td>
+                <span class="badge {% if app.status == 'selected' %}bg-success{% elif app.status == 'rejected' %}bg-danger{% else %}bg-info{% endif %}">
+                    {{ app.status|capitalize }}
+                </span>
+            </td>
+            <td>{{ app.date.strftime('%d-%m-%Y') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,23 @@
+<!-- templates/student_profile.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Profile</h2>
+<form method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ student.name }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="contact" class="form-label">Contact</label>
+        <input type="text" class="form-control" id="contact" name="contact" value="{{ student.contact }}">
+    </div>
+    <div class="mb-3">
+        <label for="resume" class="form-label">Resume</label>
+        <input type="file" class="form-control" id="resume" name="resume">
+        {% if student.resume %}
+            <p>Current: {{ student.resume }}</p>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+{% endblock %}

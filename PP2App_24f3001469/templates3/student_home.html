@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | CareerConnect</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --success: #10b981;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+
+        /* Job Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .card { background: var(--white); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); display: flex; flex-direction: column; }
+        .card h3 { margin: 0 0 0.5rem 0; color: var(--primary); }
+        .card p { font-size: 0.9rem; color: #64748b; margin-bottom: 1rem; flex-grow: 1; }
+
+        /* Resume Upload Form */
+        .apply-form {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border);
+        }
+        
+        .file-input {
+            font-size: 0.75rem;
+            margin-bottom: 0.75rem;
+            width: 100%;
+        }
+
+        .btn-apply {
+            display: block;
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem;
+            border-radius: 0.4rem;
+            border: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-apply:hover { opacity: 0.9; }
+
+        /* Applications Table */
+        .table-container { background: var(--white); border-radius: 0.75rem; border: 1px solid var(--border); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #f1f5f9; padding: 1rem; font-size: 0.875rem; color: #64748b; }
+        td { padding: 1rem; border-top: 1px solid var(--border); font-size: 0.95rem; }
+        .badge { padding: 0.25rem 0.5rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        .badge-applied { background: #dcfce7; color: #166534; }
+
+        .logout { color: #ef4444; text-decoration: none; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div style="font-weight: 800; font-size: 1.25rem;">Career<span>Connect</span></div>
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              {% if message not in ['Logged out', 'Invalid credentials', 'Registered successfully!'] %}
+                <div style="background: #e0f2fe; color: #0369a1; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem; border: 1px solid #bae6fd;">
+                  {{ message }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2 class="section-title">🚀 Available Placement Drives</h2>
+        <div class="grid">
+            {% for drive in drives %}
+            <div class="card">
+                <h3>{{ drive.title }}</h3>
+                <p>{{ drive.description[:120] }}...</p>
+                <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem;">Deadline: {{ drive.deadline }}</div>
+                
+                <form action="{{ url_for('student_apply', drive_id=drive.id) }}" method="POST" enctype="multipart/form-data" class="apply-form">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: #64748b; display: block; margin-bottom: 0.25rem;">UPLOAD RESUME (PDF/DOC)</label>
+                    <input type="file" name="resume" accept=".pdf,.doc,.docx" required class="file-input">
+                    <button type="submit" class="btn-apply">Apply with Resume</button>
+                </form>
+            </div>
+            {% else %}
+            <p style="color: #94a3b8;">No active drives at the moment.</p>
+            {% endfor %}
+        </div>
+
+        <h2 class="section-title">📝 My Applications</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Drive Title</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in my_apps %}
+                    <tr>
+                        <td><strong>{{ app.company }}</strong></td>
+                        <td>{{ app.title }}</td>
+                        <td><span class="badge badge-applied">{{ app.status }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #94a3b8; padding: 2rem;">You haven't applied to any drives yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

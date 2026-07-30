@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>All Applications</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Student Name</th>
+            <th>Placement Drive</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.id }}</td>
+            
+            <td>
+                {% if app.applicant and app.applicant.student_profile %}
+                    {{ app.applicant.student_profile.name }}
+                {% else %}
+                    <span class="text-muted">Unknown Student</span>
+                {% endif %}
+            </td>
+
+            <td>{{ app.drive.title if app.drive else "N/A" }}</td>
+
+            <td>
+                {% if app.drive and app.drive.creator and app.drive.creator.company_profile %}
+                    {{ app.drive.creator.company_profile.name }}
+                {% else %}
+                    <span class="text-muted">N/A</span>
+                {% endif %}
+            </td>
+
+            <td>
+                <span class="badge {% if app.status == 'selected' %}bg-success{% elif app.status == 'rejected' %}bg-danger{% else %}bg-info{% endif %}">
+                    {{ app.status|capitalize }}
+                </span>
+            </td>
+            <td>{{ app.date.strftime('%d-%m-%Y') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

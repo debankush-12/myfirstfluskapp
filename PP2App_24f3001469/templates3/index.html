@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Portal | CareerConnect</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --success: #10b981;
+            --dark: #1e293b;
+            --bg: #eef6ff;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 1rem;
+        }
+
+        header { text-align: center; margin-bottom: 4rem; }
+        header h1 { font-size: 3rem; font-weight: 800; color: var(--dark); margin: 0; }
+        header span { color: var(--primary); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.25rem;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .card:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        .card h2 { margin-top: 0; font-size: 1.5rem; color: var(--dark); }
+        .card p { color: #64748b; font-size: 0.95rem; margin-bottom: 2rem; height: 3em; }
+
+        .btn {
+            display: block;
+            text-decoration: none;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-outline { border: 1px solid #e2e8f0; color: var(--dark); }
+        .btn-outline:hover { background: #f1f5f9; }
+
+        .admin-section {
+            margin-top: 4rem;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+        }
+        
+        .alert {
+            background: #fef2f2;
+            color: #b91c1c;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #fecaca;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <header>
+            <h1>Career<span>Connect</span></h1>
+            <p>The unified placement management system</p>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <h2>Students</h2>
+                <p>Browse job drives and manage your career applications.</p>
+                <a href="{{ url_for('student_login') }}" class="btn btn-primary">Login</a>
+                <a href="{{ url_for('student_register') }}" class="btn btn-outline">Register</a>
+            </div>
+
+            <div class="card">
+                <h2>Companies</h2>
+                <p>Hire top talent and manage your recruitment drives.</p>
+                <a href="{{ url_for('company_login') }}" class="btn btn-success">Company Login</a>
+                <a href="{{ url_for('company_register') }}" class="btn btn-outline">Partnership</a>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <a href="{{ url_for('admin_login') }}" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem;">
+                Administrator Access
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!-- templates/company_applications.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Applications for {{ drive.title }}</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Student</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.id }}</td>
+            <td>{{ Student.query.filter_by(user_id=app.student_id).first().name }}</td>
+            <td>{{ app.status }}</td>
+            <td>
+                <a href="{{ url_for('update_status', app_id=app.id, status='shortlisted') }}" class="btn btn-info btn-sm">Shortlist</a>
+                <a href="{{ url_for('update_status', app_id=app.id, status='selected') }}" class="btn btn-success btn-sm">Select</a>
+                <a href="{{ url_for('update_status', app_id=app.id, status='rejected') }}" class="btn btn-danger btn-sm">Reject</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

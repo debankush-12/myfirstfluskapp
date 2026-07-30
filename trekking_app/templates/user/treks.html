@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Browse Treks{% endblock %}
+
+{% block content %}
+<h3 class="mb-4">Available Treks</h3>
+
+<!-- Search & filter form (GET request, no JS needed) -->
+<form method="GET" action="{{ url_for('user_treks') }}" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <input type="text" class="form-control" name="search" placeholder="Search by trek name"
+               value="{{ search }}">
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" name="difficulty">
+            <option value="">All Difficulties</option>
+            {% for level in ['Easy', 'Moderate', 'Hard'] %}
+            <option value="{{ level }}" {% if difficulty == level %}selected{% endif %}>{{ level }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <input type="text" class="form-control" name="location" placeholder="Filter by location"
+               value="{{ location }}">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+
+<div class="row g-3">
+    {% for trek in treks %}
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>{{ trek.name }}</h5>
+            <p class="mb-1"><b>Location:</b> {{ trek.location }}</p>
+            <p class="mb-1"><b>Difficulty:</b> {{ trek.difficulty }}</p>
+            <p class="mb-1"><b>Duration:</b> {{ trek.duration }} day(s)</p>
+            <p class="mb-1"><b>Slots left:</b> {{ trek.available_slots }} / {{ trek.total_slots }}</p>
+            <p class="mb-1"><b>Dates:</b> {{ trek.start_date }} to {{ trek.end_date }}</p>
+            <p class="text-muted small">{{ trek.description }}</p>
+
+            {% if trek.id in booked_trek_ids %}
+                <button class="btn btn-secondary w-100" disabled>Already Booked</button>
+            {% elif trek.available_slots <= 0 %}
+                <button class="btn btn-secondary w-100" disabled>Fully Booked</button>
+            {% else %}
+                <form method="POST" action="{{ url_for('user_book_trek', trek_id=trek.id) }}">
+                    <button type="submit" class="btn btn-success w-100">Book This Trek</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <p class="text-center text-muted">No treks match your search.</p>
+    {% endfor %}
+</div>
+{% endblock %}

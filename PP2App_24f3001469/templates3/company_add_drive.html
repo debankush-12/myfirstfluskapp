@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post a Drive | CareerConnect</title>
+    <style>
+        body { 
+            font-family: system-ui, -apple-system, sans-serif; 
+            background: #f8fafc; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            padding: 40px; 
+            margin: 0;
+        }
+        .form-card { 
+            background: white; 
+            padding: 2.5rem; 
+            border-radius: 1rem; 
+            width: 100%;
+            max-width: 500px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
+            border: 1px solid #e2e8f0;
+        }
+        h2 { margin-top: 0; color: #1e293b; font-size: 1.5rem; }
+        label { font-size: 0.875rem; font-weight: 600; color: #64748b; }
+        input, textarea { 
+            width: 100%; 
+            padding: 0.75rem; 
+            margin: 0.5rem 0 1.5rem; 
+            border: 1px solid #d1d5db; 
+            border-radius: 0.5rem; 
+            box-sizing: border-box; 
+            font-family: inherit;
+        }
+        input:focus, textarea:focus {
+            outline: 2px solid #059669;
+            border-color: transparent;
+        }
+        button { 
+            width: 100%; 
+            background: #059669; 
+            color: white; 
+            padding: 0.75rem; 
+            border: none; 
+            border-radius: 0.5rem; 
+            font-weight: 600; 
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover { background: #047857; }
+        .back-link {
+            margin-top: 1.5rem;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        .back-link:hover { color: #1e293b; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2>Post Recruitment Drive</h2>
+        <form method="POST">
+            <label>Job Title</label>
+            <input type="text" name="title" placeholder="e.g. Data Scientist Intern" required>
+            
+            <label>Job Description</label>
+            <textarea name="description" rows="4" placeholder="Detail the roles, responsibilities, and required skills (e.g. Python, SQL)..." required></textarea>
+            
+            <label>Application Deadline</label>
+            <input type="date" name="deadline" required>
+            
+            <button type="submit">Submit for Approval</button>
+        </form>
+    </div>
+    <a href="{{ url_for('company_home') }}" class="back-link">← Cancel and Go Back</a>
+</body>
+</html>

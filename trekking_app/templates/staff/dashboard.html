@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Staff Dashboard{% endblock %}
+
+{% block content %}
+<h3 class="mb-4">Trek Staff Dashboard</h3>
+
+{% if pending %}
+    <div class="alert alert-warning">
+        Your account is <b>waiting for admin approval</b>. Once approved, your assigned treks will appear here.
+    </div>
+{% else %}
+
+    <h5>Your Assigned Treks</h5>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Slots (Available/Total)</th>
+                    <th>Registered Users</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trek in treks %}
+                <tr>
+                    <td>{{ trek.id }}</td>
+                    <td>{{ trek.name }}</td>
+                    <td>{{ trek.location }}</td>
+                    <td><span class="badge bg-info text-dark">{{ trek.status }}</span></td>
+                    <td>{{ trek.available_slots }} / {{ trek.total_slots }}</td>
+                    <td>{{ trek.registered_count }}</td>
+                    <td>
+                        <a href="{{ url_for('staff_update_trek', trek_id=trek.id) }}" class="btn btn-sm btn-primary">Update</a>
+                        <a href="{{ url_for('staff_view_participants', trek_id=trek.id) }}" class="btn btn-sm btn-outline-secondary">Participants</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="text-center">No treks assigned to you yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,28 @@
+<!-- templates/register_company.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Register Company</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">Company Name</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="mb-3">
+        <label for="hr_contact" class="form-label">HR Contact</label>
+        <input type="text" class="form-control" id="hr_contact" name="hr_contact">
+    </div>
+    <div class="mb-3">
+        <label for="website" class="form-label">Website</label>
+        <input type="url" class="form-control" id="website" name="website">
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manage Students</h2>
+    <span class="badge bg-secondary">{{ students|length }} Students Registered</span>
+</div>
+
+<form method="POST" class="mb-4">
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="Search by name, username, or contact...">
+        <button class="btn btn-primary" type="submit">Search</button>
+        <a href="{{ url_for('admin_students') }}" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Student Info</th>
+                <th>Contact</th>
+                <th>Resume</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.id }}</td>
+                <td>
+                    <strong>{{ student.name }}</strong><br>
+                    <small class="text-muted">@{{ student.user.username }}</small>
+                </td>
+                <td>{{ student.contact }}</td>
+                <td>
+                    {% if student.resume %}
+                        <a href="{{ url_for('static', filename='resumes/' + student.resume) }}" target="_blank" class="btn btn-link btn-sm p-0">
+                            View PDF
+                        </a>
+                    {% else %}
+                        <span class="text-muted small">Not Uploaded</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if student.user.active %}
+                        <span class="badge bg-success">Active</span>
+                    {% else %}
+                        <span class="badge bg-dark">Blacklisted</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if student.user.active %}
+                        <a href="{{ url_for('blacklist_user', user_id=student.user_id) }}" 
+                           class="btn btn-warning btn-sm"
+                           onclick="return confirm('Are you sure you want to blacklist this student?')">
+                           Blacklist
+                        </a>
+                    {% else %}
+                        <button class="btn btn-secondary btn-sm" disabled>Inactive</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center text-muted py-4">No students found matching your criteria.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

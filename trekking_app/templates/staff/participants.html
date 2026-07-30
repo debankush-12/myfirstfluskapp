@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Trek Participants{% endblock %}
+
+{% block content %}
+<h3 class="mb-4">Participants - {{ trek.name }}</h3>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Booking Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in participants %}
+            <tr>
+                <td>{{ p.name }}</td>
+                <td>{{ p.email }}</td>
+                <td>{{ p.contact }}</td>
+                <td>{{ p.booking_date }}</td>
+                <td>{{ p.status }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="text-center">No one has registered for this trek yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<a href="{{ url_for('staff_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+{% endblock %}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Company Dashboard | CareerConnect</title>
+    <style>
+        :root { 
+            --primary: #059669; 
+            --bg: #f8fafc; 
+            --white: #ffffff; 
+            --border: #e2e8f0;
+        }
+        body { font-family: system-ui, sans-serif; background: var(--bg); margin: 0; }
+        nav { 
+            background: var(--white); 
+            padding: 1rem 2rem; 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .btn-add { background: var(--primary); color: white; padding: 0.6rem 1.2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; }
+        .card { background: var(--white); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1rem; }
+        
+        /* New Table Styles */
+        .table-container { background: var(--white); border-radius: 0.75rem; border: 1px solid var(--border); overflow: hidden; margin-top: 2.5rem; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #f1f5f9; padding: 1rem; font-size: 0.875rem; color: #64748b; border-bottom: 1px solid var(--border); }
+        td { padding: 1rem; border-top: 1px solid var(--border); font-size: 0.95rem; vertical-align: middle; }
+        
+        .status { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 4px; }
+        .pending { background: #fef3c7; color: #92400e; }
+        .approved { background: #dcfce7; color: #166534; }
+        .applied { background: #e0f2fe; color: #0369a1; }
+        
+        .resume-link { color: var(--primary); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .resume-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="font-weight: 800; color: var(--primary); font-size: 1.2rem;">Career<span>Connect</span></div>
+        <a href="{{ url_for('logout') }}" style="color: #ef4444; text-decoration: none; font-weight: 500;">Logout</a>
+    </nav>
+    <div class="container">
+        <div class="header-flex">
+            <h2>Your Recruitment Drives</h2>
+            <a href="{{ url_for('company_add_drive') }}" class="btn-add">+ Post New Drive</a>
+        </div>
+
+        {% for drive in drives %}
+        <div class="card">
+            <div style="display: flex; justify-content: space-between;">
+                <h3 style="margin: 0;">{{ drive.title }}</h3>
+                <span class="status {{ drive.status }}">{{ drive.status }}</span>
+            </div>
+            <p style="color: #64748b; margin: 1rem 0;">{{ drive.description }}</p>
+            <small style="color: #94a3b8;">Deadline: {{ drive.deadline }}</small>
+        </div>
+        {% endfor %}
+
+        <h2 style="margin-top: 3rem;">Student Applications</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Details</th>
+                        <th>Drive</th>
+                        <th>Resume</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applicants %}
+                    <tr>
+                        <td>
+                            <div style="font-weight: 700; color: #1e293b;">{{ app.name }}</div>
+                            <div style="font-size: 0.8rem; color: #64748b;">{{ app.email }}</div>
+                        </td>
+                        <td>{{ app.title }}</td>
+                        <td>
+                            {% if app.resume %}
+                            <a href="{{ url_for('static', filename='resumes/' + app.resume) }}" target="_blank" class="resume-link">
+                                📄 Download
+                            </a>
+                            {% else %}
+                            <span style="color: #cbd5e1;">No file</span>
+                            {% endif %}
+                        </td>
+                        <td><span class="status applied">{{ app.status }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #94a3b8; padding: 2rem;">No students have applied to your drives yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

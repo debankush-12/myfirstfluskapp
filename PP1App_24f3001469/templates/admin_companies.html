@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manage Companies</h2>
+    <span class="badge bg-secondary">Total: {{ companies|length }}</span>
+</div>
+
+<form method="POST" class="mb-4">
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="Search by company name...">
+        <button class="btn btn-primary" type="submit">Search</button>
+        <a href="{{ url_for('admin_companies') }}" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Company Name</th>
+                <th>HR Contact</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in companies %}
+            <tr>
+                <td>{{ company.id }}</td>
+                <td>
+                    <strong>{{ company.name }}</strong><br>
+                    <small class="text-muted">{{ company.website }}</small>
+                </td>
+                <td>{{ company.hr_contact }}</td>
+                <td>
+                    <span class="badge {% if company.approval_status == 'approved' %}bg-success{% elif company.approval_status == 'rejected' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                        {{ company.approval_status|capitalize }}
+                    </span>
+                    
+                    {% if not company.user.active %}
+                        <span class="badge bg-dark">Blacklisted</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="btn-group">
+                        {% if company.approval_status == 'pending' %}
+                            <a href="{{ url_for('approve_company', company_id=company.id) }}" class="btn btn-outline-success btn-sm">Approve</a>
+                            <a href="{{ url_for('reject_company', company_id=company.id) }}" class="btn btn-outline-danger btn-sm">Reject</a>
+                        {% endif %}
+                        
+                        {% if company.user.active %}
+                            <a href="{{ url_for('blacklist_user', user_id=company.user_id) }}" 
+                               class="btn btn-warning btn-sm" 
+                               onclick="return confirm('Are you sure you want to blacklist this company?')">
+                               Blacklist
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary btn-sm" disabled>Inactive</button>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">No companies found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
